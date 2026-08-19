@@ -15,3 +15,53 @@
 @media(min-width:700px) and (max-width:1023px){.catalog-page{max-width:920px}.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.thumb{height:210px}.detail-card{width:min(760px,calc(100% - 48px))}}
 @media(max-width:699px){.catalog-page{padding-bottom:92px}.catalog-page .top{padding-bottom:8px}.catalog-summary{align-items:flex-end}.catalog-summary select{max-width:132px}.catalog-grid{grid-template-columns:1fr;gap:10px}.exercise-card{display:grid;grid-template-columns:116px minmax(0,1fr);min-height:116px}.exercise-card .thumb{height:116px;border-radius:14px 0 0 14px}.exercise-card>div:last-child{min-width:0;padding:13px}.exercise-card h3{font-size:.94rem;line-height:1.25}.exercise-card p{min-height:0;margin:7px 0}.filter-groups{display:block}.filter-group{border-top:1px solid var(--line)}.filters-panel{position:relative}.detail{padding:0;align-items:flex-end}.detail-card{max-height:94dvh;border-radius:24px 24px 0 0}.detail-card>.exercise-placeholder,.detail-card>img{height:min(38dvh,300px)}}
 @media(max-width:480px){.exercise-card{grid-template-columns:104px minmax(0,1fr);min-height:104px}.exercise-card .thumb{height:104px}.exercise-card>div:last-child{padding:10px}.exercise-card h3{font-size:.88rem}.exercise-card p{min-height:0}.catalog-summary b{font-size:.96rem}}
+
+/* Mobile viewport spacing: keeps content clear of iOS safe areas and Android gesture bars. */
+@media(max-width:699px){
+  html,body,#root{width:100%;min-height:100%;overflow-x:hidden}
+  body{min-width:320px}
+  .app{min-height:100dvh;padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  main{
+    width:100%;
+    padding-top:max(20px,env(safe-area-inset-top));
+    padding-right:max(16px,env(safe-area-inset-right));
+    padding-bottom:24px;
+    padding-left:max(16px,env(safe-area-inset-left));
+  }
+  .catalog-page{padding-bottom:24px}
+  .top{margin-top:0;margin-bottom:20px}
+  .catalog-page .top{padding-bottom:0}
+  .catalog-summary{flex-wrap:wrap;row-gap:10px}
+  .catalog-summary select{flex:0 0 auto;min-height:44px}
+  .search{min-height:48px}
+  .filters-panel>summary{min-height:48px}
+  .bottom{
+    height:calc(76px + env(safe-area-inset-bottom));
+    padding-right:env(safe-area-inset-right);
+    padding-bottom:env(safe-area-inset-bottom);
+    padding-left:env(safe-area-inset-left);
+  }
+  .bottom button{min-width:0;min-height:56px}
+  .detail{padding-right:env(safe-area-inset-right);padding-left:env(safe-area-inset-left)}
+  .detail-card{max-height:calc(100dvh - max(12px,env(safe-area-inset-top)))}
+  .detail-close{top:max(12px,env(safe-area-inset-top));right:12px}
+  .detail-copy{
+    padding-right:max(18px,env(safe-area-inset-right));
+    padding-bottom:max(24px,env(safe-area-inset-bottom));
+    padding-left:max(18px,env(safe-area-inset-left));
+  }
+  .overlay-page{
+    min-height:100dvh;
+    padding-top:max(16px,env(safe-area-inset-top));
+    padding-right:max(16px,env(safe-area-inset-right));
+    padding-bottom:max(60px,env(safe-area-inset-bottom));
+    padding-left:max(16px,env(safe-area-inset-left));
+  }
+}
+
+@media(max-width:359px){
+  main{padding-right:max(12px,env(safe-area-inset-right));padding-left:max(12px,env(safe-area-inset-left))}
+  .exercise-card{grid-template-columns:92px minmax(0,1fr)}
+  .exercise-card .thumb{height:104px}
+  .catalog-summary select{max-width:120px}
+}
