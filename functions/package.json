@@ -1,0 +1,1 @@
+{"name":"gym-flow-functions","private":true,"main":"lib/index.js","scripts":{"build":"tsc","serve":"npm run build && firebase emulators:start --only functions"},"dependencies":{"firebase-admin":"latest","firebase-functions":"latest"},"devDependencies":{"typescript":"latest"}}
