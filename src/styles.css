@@ -228,57 +228,57 @@
 @media(max-width:430px){.filter-actions{grid-template-columns:1fr 1fr}.filter-actions .primary{grid-column:1/-1;grid-row:1}.filter-actions .filter-reset{grid-column:1}}
 
 /* Workout player: premium light session treatment */
-.workout{--workout-bg:var(--color-accent-soft);--workout-panel:var(--color-surface);--workout-line:var(--color-border);--workout-lime:var(--color-accent);--workout-green:var(--color-text-primary);--workout-ink:var(--color-text-primary);--workout-muted:var(--color-text-secondary);position:relative;isolation:isolate;background:radial-gradient(circle at 88% 4%,color-mix(in srgb,var(--color-accent) 18%,transparent),transparent 24rem),linear-gradient(180deg,var(--color-accent-soft) 0,var(--color-accent-soft) 56%,var(--color-background) 100%)}
-.workout:before{content:'';position:fixed;z-index:-1;inset:0 0 auto;height:210px;pointer-events:none;background:linear-gradient(135deg,color-mix(in srgb,var(--color-primary-dark) 5.5%,transparent),transparent 58%)}
-.workout-top{position:relative;z-index:2;background:color-mix(in srgb,var(--color-primary) 80%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid color-mix(in srgb,var(--color-primary-dark) 7%,transparent)}
-.workout-top>button{border-color:color-mix(in srgb,var(--color-primary-dark) 13%,transparent);box-shadow:0 6px 18px color-mix(in srgb,var(--color-primary-dark) 9%,transparent),inset 0 1px var(--color-surface);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
-.workout-top>button:active{transform:scale(.94);background:var(--color-accent-soft)}
-.workout-top>div:before{content:'SESSION IN PROGRESS';justify-self:center;margin-bottom:1px;padding:3px 8px;border-radius:999px;background:var(--color-accent-soft);color:var(--color-primary);font-size:.49rem;font-weight:850;letter-spacing:.12em}
+.workout{--workout-bg:#f3f6ee;--workout-panel:#fff;--workout-line:#d9e1d4;--workout-lime:#b9ee32;--workout-green:#123f34;--workout-ink:#142019;--workout-muted:#5f6c63;position:relative;isolation:isolate;background:radial-gradient(circle at 88% 4%,rgba(185,238,50,.18),transparent 24rem),linear-gradient(180deg,#f8faf5 0,#f1f5ed 56%,#edf2e9 100%)}
+.workout:before{content:'';position:fixed;z-index:-1;inset:0 0 auto;height:210px;pointer-events:none;background:linear-gradient(135deg,rgba(18,63,52,.055),transparent 58%)}
+.workout-top{position:relative;z-index:2;background:rgba(248,250,245,.8);backdrop-filter:blur(16px);border-bottom:1px solid rgba(18,63,52,.07)}
+.workout-top>button{border-color:rgba(18,63,52,.13);box-shadow:0 6px 18px rgba(18,63,52,.09),inset 0 1px #fff;transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.workout-top>button:active{transform:scale(.94);background:#edf3e8}
+.workout-top>div:before{content:'SESSION IN PROGRESS';justify-self:center;margin-bottom:1px;padding:3px 8px;border-radius:999px;background:#e8f6c7;color:#315b24;font-size:.49rem;font-weight:850;letter-spacing:.12em}
 .workout-top b{font-weight:850}.workout-top span{font-weight:700}
-.workout-progress{height:6px;background:var(--color-surface-secondary);box-shadow:inset 0 1px 2px color-mix(in srgb,var(--color-primary-dark) 10%,transparent)}
-.workout-progress i{border-radius:0 999px 999px 0;background:linear-gradient(90deg,var(--color-text-secondary),var(--workout-lime));box-shadow:0 0 13px color-mix(in srgb,var(--color-primary) 55%,transparent)}
+.workout-progress{height:6px;background:#dfe7da;box-shadow:inset 0 1px 2px rgba(18,63,52,.1)}
+.workout-progress i{border-radius:0 999px 999px 0;background:linear-gradient(90deg,#8fcf12,var(--workout-lime));box-shadow:0 0 13px rgba(143,207,18,.55)}
 .workout-main{gap:20px}
-.workout-visual{isolation:isolate;border-color:color-mix(in srgb,var(--color-primary-dark) 14%,transparent);background:radial-gradient(circle at 50% 58%,var(--color-surface) 0,var(--color-accent-soft) 58%,var(--color-accent-soft) 100%);box-shadow:0 18px 46px color-mix(in srgb,var(--color-primary-dark) 13%,transparent),inset 0 1px var(--color-surface)}
-.workout-visual:after{content:'';position:absolute;z-index:-1;left:14%;right:14%;bottom:5%;height:14%;border-radius:50%;background:color-mix(in srgb,var(--color-primary-dark) 9%,transparent);filter:blur(16px)}
+.workout-visual{isolation:isolate;border-color:rgba(18,63,52,.14);background:radial-gradient(circle at 50% 58%,#fff 0,#f8faf5 58%,#eaf1e6 100%);box-shadow:0 18px 46px rgba(18,63,52,.13),inset 0 1px #fff}
+.workout-visual:after{content:'';position:absolute;z-index:-1;left:14%;right:14%;bottom:5%;height:14%;border-radius:50%;background:rgba(18,63,52,.09);filter:blur(16px)}
 .workout-visual .exercise-visual,.workout-visual img{position:relative;z-index:0;padding:12px;filter:contrast(1.02) saturate(1.04)}
-.workout-visual>button{z-index:2;border:1px solid color-mix(in srgb,var(--color-surface) 20%,transparent);background:color-mix(in srgb,var(--color-primary-dark) 90%,transparent);box-shadow:0 5px 16px color-mix(in srgb,var(--color-primary-dark) 20%,transparent);transition:transform .18s ease,background .18s ease}
-.workout-visual>button:active{transform:scale(.95);background:var(--color-text-primary)}
-.muscle-button{font-weight:750}.sound-button{color:var(--color-accent-soft)!important}
-.difficulty-pill{padding:6px 10px;border:1px solid var(--color-accent);background:linear-gradient(135deg,var(--color-accent-soft),var(--color-accent-soft));box-shadow:0 3px 10px color-mix(in srgb,var(--color-primary) 8%,transparent);color:var(--color-primary)}
+.workout-visual>button{z-index:2;border:1px solid rgba(255,255,255,.2);background:rgba(13,47,39,.9);box-shadow:0 5px 16px rgba(13,47,39,.2);transition:transform .18s ease,background .18s ease}
+.workout-visual>button:active{transform:scale(.95);background:#0d3028}
+.muscle-button{font-weight:750}.sound-button{color:#e9ffd2!important}
+.difficulty-pill{padding:6px 10px;border:1px solid #cfe6a2;background:linear-gradient(135deg,#eef9d5,#e5f2c7);box-shadow:0 3px 10px rgba(71,107,34,.08);color:#285522}
 .workout-title-row{align-items:flex-end}.workout-title-row h1{color:var(--workout-ink);font-weight:850;text-wrap:balance}
-.workout-title-row button{border-color:color-mix(in srgb,var(--color-primary-dark) 13%,transparent);background:color-mix(in srgb,var(--color-surface) 90%,transparent);box-shadow:0 5px 15px color-mix(in srgb,var(--color-primary-dark) 8%,transparent);transition:transform .18s ease,background .18s ease}
-.workout-title-row button:active{transform:scale(.94);background:var(--color-accent-soft)}
-.workout-identity>p{font-weight:600}.workout-identity>p::first-line{color:var(--color-primary)}
-.workout-meta-grid{border-color:color-mix(in srgb,var(--color-primary-dark) 12%,transparent);background:linear-gradient(145deg,var(--color-surface),var(--color-accent-soft));box-shadow:0 8px 24px color-mix(in srgb,var(--color-primary-dark) 7%,transparent)}
-.workout-meta-grid>div{position:relative;border-color:var(--color-surface-secondary)}.workout-meta-grid>div:before{content:'';position:absolute;top:0;left:28%;right:28%;height:2px;border-radius:0 0 3px 3px;background:var(--workout-lime);opacity:.75}
-.workout-meta-grid svg{padding:5px;box-sizing:content-box;border-radius:9px;background:var(--color-accent-soft);color:var(--color-primary)}
-.workout-meta-grid span{font-weight:750}.workout-meta-grid b{color:var(--color-text-primary);font-weight:650}
-.how-to-heading h2{color:var(--color-text-secondary);font-weight:850}.how-to-heading button{min-height:40px;border-color:color-mix(in srgb,var(--color-primary-dark) 12%,transparent);background:var(--color-accent-soft);color:var(--color-text-primary);font-weight:700;box-shadow:0 3px 10px color-mix(in srgb,var(--color-primary-dark) 5%,transparent)}
-.how-to li{border-color:color-mix(in srgb,var(--color-primary-dark) 12%,transparent);background:linear-gradient(135deg,var(--color-surface),var(--color-accent-soft));box-shadow:0 6px 18px color-mix(in srgb,var(--color-primary-dark) 6%,transparent)}
-.how-to li>span{border:0;background:var(--workout-green);color:var(--workout-lime);font-weight:850;box-shadow:0 0 0 4px var(--color-accent-soft)}
-.how-to li p{color:var(--color-text-primary)}
-.workout-console{isolation:isolate;border-color:color-mix(in srgb,var(--color-primary-dark) 12%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--color-surface) 98.5%,transparent),color-mix(in srgb,var(--color-accent) 98.5%,transparent));box-shadow:0 -22px 55px color-mix(in srgb,var(--color-primary-dark) 16%,transparent)}
-.workout-console:before{content:'';width:44px;height:4px;border-radius:999px;background:var(--color-border);margin-bottom:1px}
-.phase-label{display:flex;align-items:center;gap:7px;color:var(--color-primary);font-weight:900}.phase-label:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--workout-lime);box-shadow:0 0 0 4px color-mix(in srgb,var(--color-accent) 19%,transparent)}
-.workout .timer{font-weight:850;text-shadow:0 3px 0 var(--color-surface);filter:drop-shadow(0 8px 12px color-mix(in srgb,var(--color-primary-dark) 8%,transparent))}
-.timer-side{border-color:color-mix(in srgb,var(--color-primary-dark) 14%,transparent);background:linear-gradient(145deg,var(--color-surface),var(--color-accent-soft));color:var(--workout-green);box-shadow:0 6px 16px color-mix(in srgb,var(--color-primary-dark) 8%,transparent);transition:transform .18s ease}
+.workout-title-row button{border-color:rgba(18,63,52,.13);background:rgba(255,255,255,.9);box-shadow:0 5px 15px rgba(18,63,52,.08);transition:transform .18s ease,background .18s ease}
+.workout-title-row button:active{transform:scale(.94);background:#edf4e8}
+.workout-identity>p{font-weight:600}.workout-identity>p::first-line{color:#365f26}
+.workout-meta-grid{border-color:rgba(18,63,52,.12);background:linear-gradient(145deg,#fff,#f7faf4);box-shadow:0 8px 24px rgba(18,63,52,.07)}
+.workout-meta-grid>div{position:relative;border-color:#e3e9df}.workout-meta-grid>div:before{content:'';position:absolute;top:0;left:28%;right:28%;height:2px;border-radius:0 0 3px 3px;background:var(--workout-lime);opacity:.75}
+.workout-meta-grid svg{padding:5px;box-sizing:content-box;border-radius:9px;background:#edf7da;color:#2f6924}
+.workout-meta-grid span{font-weight:750}.workout-meta-grid b{color:#334039;font-weight:650}
+.how-to-heading h2{color:#44534a;font-weight:850}.how-to-heading button{min-height:40px;border-color:rgba(18,63,52,.12);background:#f9fbf7;color:#34453b;font-weight:700;box-shadow:0 3px 10px rgba(18,63,52,.05)}
+.how-to li{border-color:rgba(18,63,52,.12);background:linear-gradient(135deg,#fff,#f9fbf7);box-shadow:0 6px 18px rgba(18,63,52,.06)}
+.how-to li>span{border:0;background:var(--workout-green);color:var(--workout-lime);font-weight:850;box-shadow:0 0 0 4px #edf6de}
+.how-to li p{color:#405047}
+.workout-console{isolation:isolate;border-color:rgba(18,63,52,.12);background:linear-gradient(180deg,rgba(255,255,255,.985),rgba(246,250,242,.985));box-shadow:0 -22px 55px rgba(18,63,52,.16)}
+.workout-console:before{content:'';width:44px;height:4px;border-radius:999px;background:#cdd8c7;margin-bottom:1px}
+.phase-label{display:flex;align-items:center;gap:7px;color:#285d27;font-weight:900}.phase-label:before{content:'';width:7px;height:7px;border-radius:50%;background:var(--workout-lime);box-shadow:0 0 0 4px rgba(185,238,50,.19)}
+.workout .timer{font-weight:850;text-shadow:0 3px 0 #fff;filter:drop-shadow(0 8px 12px rgba(18,63,52,.08))}
+.timer-side{border-color:rgba(18,63,52,.14);background:linear-gradient(145deg,#fff,#eaf1e6);color:var(--workout-green);box-shadow:0 6px 16px rgba(18,63,52,.08);transition:transform .18s ease}
 .timer-side:active{transform:scale(.95)}
-.workout .continue{border-radius:14px;background:var(--workout-green);color:var(--color-surface);font-weight:800;box-shadow:0 8px 20px color-mix(in srgb,var(--color-primary-dark) 18%,transparent)}
-.workout .player-controls button{border-color:color-mix(in srgb,var(--color-primary-dark) 12%,transparent);background:linear-gradient(145deg,var(--color-surface),var(--color-surface-secondary));color:var(--workout-green);box-shadow:0 7px 18px color-mix(in srgb,var(--color-primary-dark) 10%,transparent);transition:transform .18s ease,box-shadow .18s ease}
-.workout .player-controls button:active{transform:scale(.92);box-shadow:0 3px 8px color-mix(in srgb,var(--color-primary-dark) 10%,transparent)}
-.workout .player-controls .pause{border:4px solid var(--color-surface);background:linear-gradient(145deg,var(--color-accent),var(--workout-lime));box-shadow:0 0 0 2px var(--color-text-secondary),0 12px 28px color-mix(in srgb,var(--color-primary) 30%,transparent);color:var(--color-text-primary)}
-.workout.is-paused .player-controls .pause{background:var(--workout-green);box-shadow:0 0 0 2px var(--color-text-secondary),0 10px 22px color-mix(in srgb,var(--color-primary-dark) 26%,transparent);color:var(--workout-lime)}
-.workout .end{border-color:var(--color-danger-soft);background:color-mix(in srgb,var(--color-danger) 90%,transparent);color:var(--color-danger);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--color-surface) 70%,transparent);transition:background .18s ease,transform .18s ease}
-.workout .end:active{transform:scale(.98);background:var(--color-danger-soft)}
-.workout.is-rest .workout-progress i{background:linear-gradient(90deg,var(--color-text-primary),var(--color-text-secondary))}
-.workout.is-rest .phase-label:before{background:var(--color-text-secondary);box-shadow:0 0 0 4px color-mix(in srgb,var(--color-primary-dark) 15%,transparent)}
-.workout-confirm{background:color-mix(in srgb,var(--color-primary-dark) 54%,transparent);backdrop-filter:blur(12px)}
-.workout-confirm>div{position:relative;overflow:hidden;padding:32px 24px 24px;border-color:color-mix(in srgb,var(--color-primary-dark) 13%,transparent);background:linear-gradient(160deg,var(--color-surface),var(--color-accent-soft));box-shadow:0 28px 90px color-mix(in srgb,var(--color-primary-dark) 30%,transparent)}
-.workout-confirm>div:before{content:'';position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--color-danger),var(--color-danger-soft))}
-.workout-confirm svg{box-sizing:content-box;padding:13px;border-radius:50%;background:var(--color-danger-soft);box-shadow:0 0 0 7px color-mix(in srgb,var(--color-danger) 7%,transparent)}
+.workout .continue{border-radius:14px;background:var(--workout-green);color:#fff;font-weight:800;box-shadow:0 8px 20px rgba(18,63,52,.18)}
+.workout .player-controls button{border-color:rgba(18,63,52,.12);background:linear-gradient(145deg,#fff,#e9f0e6);color:var(--workout-green);box-shadow:0 7px 18px rgba(18,63,52,.1);transition:transform .18s ease,box-shadow .18s ease}
+.workout .player-controls button:active{transform:scale(.92);box-shadow:0 3px 8px rgba(18,63,52,.1)}
+.workout .player-controls .pause{border:4px solid #fff;background:linear-gradient(145deg,#c9f65a,var(--workout-lime));box-shadow:0 0 0 2px #9dcd24,0 12px 28px rgba(114,156,22,.3);color:#173f33}
+.workout.is-paused .player-controls .pause{background:var(--workout-green);box-shadow:0 0 0 2px #2f6758,0 10px 22px rgba(18,63,52,.26);color:var(--workout-lime)}
+.workout .end{border-color:#e7babe;background:rgba(255,248,248,.9);color:#a92730;box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);transition:background .18s ease,transform .18s ease}
+.workout .end:active{transform:scale(.98);background:#fdeced}
+.workout.is-rest .workout-progress i{background:linear-gradient(90deg,#12644f,#4f9a6b)}
+.workout.is-rest .phase-label:before{background:#2b8468;box-shadow:0 0 0 4px rgba(43,132,104,.15)}
+.workout-confirm{background:rgba(13,31,24,.54);backdrop-filter:blur(12px)}
+.workout-confirm>div{position:relative;overflow:hidden;padding:32px 24px 24px;border-color:rgba(18,63,52,.13);background:linear-gradient(160deg,#fff,#f7faf5);box-shadow:0 28px 90px rgba(10,35,27,.3)}
+.workout-confirm>div:before{content:'';position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,#bd2e38,#ff737b)}
+.workout-confirm svg{box-sizing:content-box;padding:13px;border-radius:50%;background:#fff0f1;box-shadow:0 0 0 7px rgba(216,58,69,.07)}
 .workout-confirm h2{margin-top:18px;font-size:1.65rem;letter-spacing:-.025em}.workout-confirm p{max-width:310px;margin:0 auto 24px;line-height:1.55}
 .workout-confirm .danger,.workout-confirm .secondary{min-height:48px;border-radius:14px;font-weight:800}
-.workout-confirm .danger{border-color:var(--color-danger-soft);background:var(--color-danger-soft);color:var(--color-danger)}.workout-confirm .secondary{box-shadow:0 8px 20px color-mix(in srgb,var(--color-primary-dark) 18%,transparent)}
+.workout-confirm .danger{border-color:#e9b9bd;background:#fff7f7;color:#a92730}.workout-confirm .secondary{box-shadow:0 8px 20px rgba(18,63,52,.18)}
 
 @media(max-width:430px){.workout-top{padding-right:max(16px,env(safe-area-inset-right));padding-left:max(16px,env(safe-area-inset-left))}.workout-top>div:before{font-size:.46rem}.workout-main{padding-right:max(16px,env(safe-area-inset-right));padding-left:max(16px,env(safe-area-inset-left));gap:16px}.workout-visual .exercise-visual,.workout-visual img{padding:8px}.workout-title-row{gap:8px}.workout-title-row>div{gap:6px}.workout-meta-grid>div{gap:4px}.workout-meta-grid svg{width:18px;height:18px;padding:4px}.how-to li{min-height:76px;padding:12px}.workout-console{padding-right:max(16px,env(safe-area-inset-right));padding-left:max(16px,env(safe-area-inset-left))}}
 @media(max-width:359px){.workout-top{grid-template-columns:44px 1fr 44px;padding-inline:max(12px,env(safe-area-inset-left))}.workout-top>button{width:44px;height:44px}.workout-top b{font-size:.74rem}.workout-top span{font-size:.62rem}.workout-main{padding-right:max(12px,env(safe-area-inset-right));padding-left:max(12px,env(safe-area-inset-left))}.workout-title-row h1{font-size:1.72rem}.workout-title-row button{width:40px;height:40px}.workout-meta-grid span{font-size:.5rem}.workout-meta-grid b{font-size:.59rem}.workout-console{padding-right:max(12px,env(safe-area-inset-right));padding-left:max(12px,env(safe-area-inset-left))}.timer-row{grid-template-columns:56px 1fr 56px}.timer-side,.timer-spacer{width:56px}.timer-side{height:56px}.workout .timer{font-size:3rem}.workout .player-controls{gap:12px}.workout-confirm{padding:16px}.workout-confirm>div{padding-inline:18px}}
