@@ -13,6 +13,7 @@ const WINDOW_MS = 60_000;
 const FRESH_CATALOG_MS = 24 * 60 * 60 * 1_000;
 const GIF_ID = /^[A-Za-z0-9_-]{1,120}$/;
 let nextGifFetchAt = 0;
+let gifFetchQueue: Promise<void> = Promise.resolve();
 
 type WorkoutXExercise = Record<string, unknown> & { id?: unknown; name?: unknown; bodyPart?: unknown; target?: unknown; secondaryMuscles?: unknown; equipment?: unknown; instructions?: unknown; gifUrl?: unknown };
 type WorkoutXPage = { total?: unknown; count?: unknown; data?: unknown };
@@ -21,7 +22,7 @@ const strings = (value: unknown, max = 100) => Array.isArray(value) ? value.slic
 const sleep = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
 
 export const workoutXGif = onRequest({
-  secrets:[workoutXKey],cors:['https://missy-sc.github.io'],maxInstances:1,concurrency:1,timeoutSeconds:120,memory:'512MiB',
+  secrets:[workoutXKey],cors:['https://missy-sc.github.io'],maxInstances:1,concurrency:40,timeoutSeconds:120,memory:'512MiB',
 }, async (request,response) => {
   if (!['GET','HEAD'].includes(request.method)) { response.set('Allow','GET, HEAD').status(405).send('Method not allowed'); return; }
   const exerciseId = typeof request.query.id === 'string' ? request.query.id : '';
@@ -38,21 +39,37 @@ export const workoutXGif = onRequest({
     return;
   }
 
-  const delay = Math.max(0, nextGifFetchAt - Date.now());
-  if (delay) await sleep(delay);
-  nextGifFetchAt = Date.now() + REQUEST_DELAY_MS;
-  const gifUrl = `https://api.workoutxapp.com/v1/gifs/${encodeURIComponent(exerciseId)}.gif`;
-  const gifRequest = () => fetch(gifUrl,{headers:{'X-WorkoutX-Key':workoutXKey.value(),Accept:'image/gif'}});
-  let upstream = await gifRequest();
-  if (upstream.status === 429) {
-    const retryAfter = Number(upstream.headers.get('retry-after'));
-    await sleep(Number.isFinite(retryAfter) ? Math.min(retryAfter * 1_000, WINDOW_MS) : WINDOW_MS);
-    upstream = await gifRequest();
-  }
-  const contentType = upstream.headers.get('content-type') || '';
-  if (!upstream.ok || !contentType.startsWith('image/')) { console.error('WorkoutX preview fetch failed',{status:upstream.status,contentType}); response.status(upstream.status === 404 ? 404 : 502).send('Exercise preview unavailable'); return; }
-  const body = Buffer.from(await upstream.arrayBuffer());
-  await cachedGif.save(body,{contentType,metadata:{cacheControl:'public,max-age=31536000,immutable'}});
+  let contentType = '';
+  let body: Buffer | undefined;
+  let upstreamStatus = 502;
+  const queuedFetch = gifFetchQueue.then(async () => {
+    const [becameCached] = await cachedGif.exists();
+    if (becameCached) {
+      [body] = await cachedGif.download();
+      contentType = 'image/gif';
+      upstreamStatus = 200;
+      return;
+    }
+    const delay = Math.max(0, nextGifFetchAt - Date.now());
+    if (delay) await sleep(delay);
+    nextGifFetchAt = Date.now() + REQUEST_DELAY_MS;
+    const gifUrl = `https://api.workoutxapp.com/v1/gifs/${encodeURIComponent(exerciseId)}.gif`;
+    const gifRequest = () => fetch(gifUrl,{headers:{'X-WorkoutX-Key':workoutXKey.value(),Accept:'image/gif'}});
+    let upstream = await gifRequest();
+    if (upstream.status === 429) {
+      const retryAfter = Number(upstream.headers.get('retry-after'));
+      await sleep(Number.isFinite(retryAfter) ? Math.min(retryAfter * 1_000, WINDOW_MS) : WINDOW_MS);
+      upstream = await gifRequest();
+    }
+    upstreamStatus = upstream.status;
+    contentType = upstream.headers.get('content-type') || '';
+    if (!upstream.ok || !contentType.startsWith('image/')) return;
+    body = Buffer.from(await upstream.arrayBuffer());
+    await cachedGif.save(body,{contentType,metadata:{cacheControl:'public,max-age=31536000,immutable'}});
+  });
+  gifFetchQueue = queuedFetch.then(() => undefined, () => undefined);
+  await queuedFetch;
+  if (!body || !contentType.startsWith('image/')) { console.error('WorkoutX preview fetch failed',{status:upstreamStatus,contentType}); response.status(upstreamStatus === 404 ? 404 : 502).send('Exercise preview unavailable'); return; }
   response.set('Content-Type',contentType);
   response.set('Cache-Control','public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
   response.set('X-Content-Type-Options','nosniff');
