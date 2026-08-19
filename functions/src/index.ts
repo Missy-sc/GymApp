@@ -1,7 +1,8 @@
-import { onCall, HttpsError } from 'firebase-functions/v2/https';
+import { onCall, onRequest, HttpsError } from 'firebase-functions/v2/https';
 import { defineSecret } from 'firebase-functions/params';
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
+import { getStorage } from 'firebase-admin/storage';
 
 initializeApp();
 const workoutXKey = defineSecret('WORKOUTX_API_KEY');
@@ -10,12 +11,54 @@ const PAGE_SIZE = 10;
 const REQUEST_DELAY_MS = 2_100;
 const WINDOW_MS = 60_000;
 const FRESH_CATALOG_MS = 24 * 60 * 60 * 1_000;
+const GIF_ID = /^[A-Za-z0-9_-]{1,120}$/;
+let nextGifFetchAt = 0;
 
 type WorkoutXExercise = Record<string, unknown> & { id?: unknown; name?: unknown; bodyPart?: unknown; target?: unknown; secondaryMuscles?: unknown; equipment?: unknown; instructions?: unknown; gifUrl?: unknown };
 type WorkoutXPage = { total?: unknown; count?: unknown; data?: unknown };
 const text = (value: unknown, max = 4_000) => typeof value === 'string' ? value.slice(0, max) : '';
 const strings = (value: unknown, max = 100) => Array.isArray(value) ? value.slice(0, max).filter((item): item is string => typeof item === 'string').map(item => item.slice(0, 4_000)) : [];
 const sleep = (milliseconds: number) => new Promise(resolve => setTimeout(resolve, milliseconds));
+
+export const workoutXGif = onRequest({
+  secrets:[workoutXKey],cors:['https://missy-sc.github.io'],maxInstances:1,concurrency:1,timeoutSeconds:120,memory:'512MiB',
+}, async (request,response) => {
+  if (!['GET','HEAD'].includes(request.method)) { response.set('Allow','GET, HEAD').status(405).send('Method not allowed'); return; }
+  const exerciseId = typeof request.query.id === 'string' ? request.query.id : '';
+  if (!GIF_ID.test(exerciseId)) { response.status(400).send('Invalid exercise id'); return; }
+  const cachedGif = getStorage().bucket().file(`workoutx-gifs/${exerciseId}.gif`);
+  const [cached] = await cachedGif.exists();
+  if (cached) {
+    const [body] = await cachedGif.download();
+    response.set('Content-Type','image/gif');
+    response.set('Cache-Control','public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
+    response.set('X-Content-Type-Options','nosniff');
+    if (request.method === 'HEAD') { response.status(200).end(); return; }
+    response.status(200).send(body);
+    return;
+  }
+
+  const delay = Math.max(0, nextGifFetchAt - Date.now());
+  if (delay) await sleep(delay);
+  nextGifFetchAt = Date.now() + REQUEST_DELAY_MS;
+  const gifUrl = `https://api.workoutxapp.com/v1/gifs/${encodeURIComponent(exerciseId)}.gif`;
+  const gifRequest = () => fetch(gifUrl,{headers:{'X-WorkoutX-Key':workoutXKey.value(),Accept:'image/gif'}});
+  let upstream = await gifRequest();
+  if (upstream.status === 429) {
+    const retryAfter = Number(upstream.headers.get('retry-after'));
+    await sleep(Number.isFinite(retryAfter) ? Math.min(retryAfter * 1_000, WINDOW_MS) : WINDOW_MS);
+    upstream = await gifRequest();
+  }
+  const contentType = upstream.headers.get('content-type') || '';
+  if (!upstream.ok || !contentType.startsWith('image/')) { console.error('WorkoutX preview fetch failed',{status:upstream.status,contentType}); response.status(upstream.status === 404 ? 404 : 502).send('Exercise preview unavailable'); return; }
+  const body = Buffer.from(await upstream.arrayBuffer());
+  await cachedGif.save(body,{contentType,metadata:{cacheControl:'public,max-age=31536000,immutable'}});
+  response.set('Content-Type',contentType);
+  response.set('Cache-Control','public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
+  response.set('X-Content-Type-Options','nosniff');
+  if (request.method === 'HEAD') { response.status(200).end(); return; }
+  response.status(200).send(body);
+});
 
 async function fetchPage(offset: number): Promise<WorkoutXPage> {
   const url = new URL(API_URL);
