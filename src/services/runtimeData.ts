@@ -1,11 +1,11 @@
 import type { CalendarAssignment, Exercise, GymClass, Preferences, Routine, WorkoutSession } from '../domain/types';
 import { exercises as seed, setExerciseCatalog } from '../data/exercises';
-import { authService, firestoreRepositories, localRepositories, type AppRepositories } from './repositories';
+import type { User } from 'firebase/auth';
+import { firestoreRepositories, localRepositories, type AppRepositories } from './repositories';
 import { FirestoreCatalogCache } from './workoutX';
 
 export interface RuntimeData { userId:string; repositories:AppRepositories; catalog:Exercise[]; remote:boolean }
-export async function initializeRuntime():Promise<RuntimeData>{
-  const user=await authService.signInGuest().catch(()=>null);
+export async function initializeRuntime(user:User|null):Promise<RuntimeData>{
   if(!user)return{userId:'local-user',repositories:localRepositories,catalog:seed,remote:false};
   const cache=new FirestoreCatalogCache();
   const catalog=await cache.list().catch(()=>[]);setExerciseCatalog(catalog.length?catalog:seed);
