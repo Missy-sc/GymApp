@@ -125,21 +125,21 @@ function Workout({value,setValue,close,prefs,onToggleSound}:{value:{routine:Rout
 }
 function HistoryPage({sessions}:{sessions:WorkoutSession[]}){return <main><Header eyebrow="YOUR PROGRESS" title="History"/><div className="summary"><div><Activity/><b>{sessions.length}</b><span>Workouts</span></div><div><Clock3/><b>{Math.round(sessions.reduce((n,s)=>n+s.duration,0)/60)}</b><span>Minutes</span></div></div><SectionTitle title="Recent workouts"/><div className="list">{sessions.map(s=><div className="history-row card" key={s.id}><span className="date"><b>{new Date(s.startedAt).getDate()}</b>{new Date(s.startedAt).toLocaleString('en',{month:'short'})}</span><div><b>{s.routineName}</b><p>{fmt(s.duration)}   {s.completedExercises} exercises</p></div><span className="pill lime">{s.status}</span></div>)}{!sessions.length&&<Empty text="Finish a workout to start your history."/>}</div></main>}
 const THEME_META:Record<Theme,{label:string;sub:string;primary:string;accent:string;background:string}>={
- 'touchflow-blue':{label:'TouchFlow',sub:'Coral · gesture-native and clean',primary:'#2563EB',accent:'#F97171',background:'#FFFFFF'},
- 'electric-navy':{label:'Electric blue',sub:'Navy · sporty and modern',primary:'#173B57',accent:'#4DA8FF',background:'#F6F8FA'},
- 'petrol-coral':{label:'Petrol blue',sub:'Coral · premium personality',primary:'#183D46',accent:'#FF6B5E',background:'#F7F7F4'},
- 'violet-lavender':{label:'Deep violet',sub:'Lavender · digital and premium',primary:'#342A56',accent:'#8B6CFF',background:'#F8F7FA'},
- 'carbon-orange':{label:'Carbon',sub:'Orange · energetic and sporty',primary:'#202225',accent:'#FF8A24',background:'#F7F6F3'},
- 'burgundy-rose':{label:'Burgundy',sub:'Warm rose · elegant and different',primary:'#512836',accent:'#D8647A',background:'#FAF7F7'},
- 'night-cyan':{label:'Night blue',sub:'Cyan · premium fitness',primary:'#162B3A',accent:'#39C6D8',background:'#F5F8F9'},
- 'turquoise-mango':{label:'Turquoise',sub:'Mango · fresh and energetic',primary:'#165E63',accent:'#FFB020',background:'#F7FBFB'},
- 'indigo-fuchsia':{label:'Indigo',sub:'Fuchsia · digital and bold',primary:'#2F2A68',accent:'#FF4FA3',background:'#F8F7FC'},
- 'cobalt-lime':{label:'Cobalt blue',sub:'Lime · powerful and sporty',primary:'#1A4FBF',accent:'#B8F000',background:'#F6F9FF'},
- 'plum-coral':{label:'Plum',sub:'Coral · premium and warm',primary:'#5B2E48',accent:'#FF6F61',background:'#FBF7F8'},
- 'cyan-violet':{label:'Cyan',sub:'Violet · futuristic and fresh',primary:'#0F5D73',accent:'#7B61FF',background:'#F5FAFC'},
- 'raspberry-peach':{label:'Raspberry',sub:'Peach · vibrant and friendly',primary:'#8A1E5A',accent:'#FF9A62',background:'#FFF8F6'},
- 'midnight-yellow':{label:'Midnight blue',sub:'Solar yellow · athletic and visible',primary:'#152C4A',accent:'#FFD447',background:'#F7F9FC'},
- 'teal-bubblegum':{label:'Teal',sub:'Bubblegum · fun and original',primary:'#135C57',accent:'#FF5FA2',background:'#F6FBFA'}
+ 'touchflow-blue':{label:'TouchFlow',sub:'Coral · gesture-native and clean',primary:'#2563EB',accent:'#F24848',background:'#F4F5F6'},
+ 'electric-navy':{label:'Electric blue',sub:'Navy · sporty and modern',primary:'#173B57',accent:'#4DA8FF',background:'#F4F5F6'},
+ 'petrol-coral':{label:'Petrol blue',sub:'Coral · premium personality',primary:'#183D46',accent:'#FF6B5E',background:'#F4F5F6'},
+ 'violet-lavender':{label:'Deep violet',sub:'Electric violet · digital and premium',primary:'#342A56',accent:'#8B6CFF',background:'#F4F5F6'},
+ 'carbon-orange':{label:'Carbon',sub:'Orange · energetic and sporty',primary:'#202225',accent:'#FF8A24',background:'#F4F5F6'},
+ 'burgundy-rose':{label:'Burgundy',sub:'Crimson · elegant and different',primary:'#512836',accent:'#D93D5D',background:'#F4F5F6'},
+ 'night-cyan':{label:'Night blue',sub:'Cyan · premium fitness',primary:'#162B3A',accent:'#39C6D8',background:'#F4F5F6'},
+ 'turquoise-mango':{label:'Turquoise',sub:'Mango · fresh and energetic',primary:'#165E63',accent:'#FFB020',background:'#F4F5F6'},
+ 'indigo-fuchsia':{label:'Indigo',sub:'Fuchsia · digital and bold',primary:'#2F2A68',accent:'#FF4FA3',background:'#F4F5F6'},
+ 'cobalt-lime':{label:'Cobalt blue',sub:'Lime · powerful and sporty',primary:'#1A4FBF',accent:'#B8F000',background:'#F4F5F6'},
+ 'plum-coral':{label:'Plum',sub:'Coral · premium and warm',primary:'#5B2E48',accent:'#FF6F61',background:'#F4F5F6'},
+ 'cyan-violet':{label:'Cyan',sub:'Violet · futuristic and fresh',primary:'#0F5D73',accent:'#7B61FF',background:'#F4F5F6'},
+ 'raspberry-peach':{label:'Raspberry',sub:'Orange · vibrant and friendly',primary:'#8A1E5A',accent:'#FF6D2D',background:'#F4F5F6'},
+ 'midnight-yellow':{label:'Midnight blue',sub:'Solar yellow · athletic and visible',primary:'#152C4A',accent:'#FFD447',background:'#F4F5F6'},
+ 'teal-bubblegum':{label:'Teal',sub:'Hot pink · fun and original',primary:'#135C57',accent:'#FF5FA2',background:'#F4F5F6'}
 };
 function ThemeMini({theme}:{theme:Theme}){const m=THEME_META[theme];return <span className="theme-mini" style={{background:m.background}}><span className="theme-mini-bar" style={{background:m.primary}}/><span className="theme-mini-dot" style={{background:m.accent}}/></span>}
 function Profile({prefs,setPrefs,account,signOut}:{prefs:Preferences;setPrefs:(p:Preferences)=>void;account:AuthUser|null;signOut:()=>void}){
