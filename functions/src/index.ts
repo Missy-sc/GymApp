@@ -3,6 +3,7 @@ import { defineSecret } from 'firebase-functions/params';
 import { initializeApp } from 'firebase-admin/app';
 import { FieldValue, getFirestore } from 'firebase-admin/firestore';
 import { getStorage } from 'firebase-admin/storage';
+import sharp from 'sharp';
 
 initializeApp();
 const workoutXKey = defineSecret('WORKOUTX_API_KEY');
@@ -26,10 +27,24 @@ export const workoutXGif = onRequest({
 }, async (request,response) => {
   if (!['GET','HEAD'].includes(request.method)) { response.set('Allow','GET, HEAD').status(405).send('Method not allowed'); return; }
   const exerciseId = typeof request.query.id === 'string' ? request.query.id : '';
+  const staticFrame = request.query.frame === 'first';
   if (!GIF_ID.test(exerciseId)) { response.status(400).send('Invalid exercise id'); return; }
+  const cachedFrame = getStorage().bucket().file(`workoutx-frames/${exerciseId}.webp`);
   const cachedGif = getStorage().bucket().file(`workoutx-gifs/${exerciseId}.gif`);
+  if (staticFrame) {
+    const [frameExists] = await cachedFrame.exists();
+    if (frameExists) {
+      const [frame] = await cachedFrame.download();
+      response.set('Content-Type','image/webp');
+      response.set('Cache-Control','public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
+      response.set('X-Content-Type-Options','nosniff');
+      if (request.method === 'HEAD') { response.status(200).end(); return; }
+      response.status(200).send(frame);
+      return;
+    }
+  }
   const [cached] = await cachedGif.exists();
-  if (cached) {
+  if (cached && !staticFrame) {
     const [body] = await cachedGif.download();
     response.set('Content-Type','image/gif');
     response.set('Cache-Control','public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
@@ -70,6 +85,11 @@ export const workoutXGif = onRequest({
   gifFetchQueue = queuedFetch.then(() => undefined, () => undefined);
   await queuedFetch;
   if (!body || !contentType.startsWith('image/')) { console.error('WorkoutX preview fetch failed',{status:upstreamStatus,contentType}); response.status(upstreamStatus === 404 ? 404 : 502).send('Exercise preview unavailable'); return; }
+  if (staticFrame) {
+    body = await sharp(body,{animated:false}).webp({quality:82}).toBuffer();
+    contentType = 'image/webp';
+    await cachedFrame.save(body,{contentType,metadata:{cacheControl:'public,max-age=31536000,immutable'}});
+  }
   response.set('Content-Type',contentType);
   response.set('Cache-Control','public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
   response.set('X-Content-Type-Options','nosniff');

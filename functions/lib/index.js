@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.syncWorkoutX = exports.workoutXGif = void 0;
 const https_1 = require("firebase-functions/v2/https");
@@ -6,6 +9,7 @@ const params_1 = require("firebase-functions/params");
 const app_1 = require("firebase-admin/app");
 const firestore_1 = require("firebase-admin/firestore");
 const storage_1 = require("firebase-admin/storage");
+const sharp_1 = __importDefault(require("sharp"));
 (0, app_1.initializeApp)();
 const workoutXKey = (0, params_1.defineSecret)('WORKOUTX_API_KEY');
 const API_URL = 'https://api.workoutxapp.com/v1/exercises';
@@ -27,13 +31,30 @@ exports.workoutXGif = (0, https_1.onRequest)({
         return;
     }
     const exerciseId = typeof request.query.id === 'string' ? request.query.id : '';
+    const staticFrame = request.query.frame === 'first';
     if (!GIF_ID.test(exerciseId)) {
         response.status(400).send('Invalid exercise id');
         return;
     }
+    const cachedFrame = (0, storage_1.getStorage)().bucket().file(`workoutx-frames/${exerciseId}.webp`);
     const cachedGif = (0, storage_1.getStorage)().bucket().file(`workoutx-gifs/${exerciseId}.gif`);
+    if (staticFrame) {
+        const [frameExists] = await cachedFrame.exists();
+        if (frameExists) {
+            const [frame] = await cachedFrame.download();
+            response.set('Content-Type', 'image/webp');
+            response.set('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
+            response.set('X-Content-Type-Options', 'nosniff');
+            if (request.method === 'HEAD') {
+                response.status(200).end();
+                return;
+            }
+            response.status(200).send(frame);
+            return;
+        }
+    }
     const [cached] = await cachedGif.exists();
-    if (cached) {
+    if (cached && !staticFrame) {
         const [body] = await cachedGif.download();
         response.set('Content-Type', 'image/gif');
         response.set('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
@@ -81,6 +102,11 @@ exports.workoutXGif = (0, https_1.onRequest)({
         console.error('WorkoutX preview fetch failed', { status: upstreamStatus, contentType });
         response.status(upstreamStatus === 404 ? 404 : 502).send('Exercise preview unavailable');
         return;
+    }
+    if (staticFrame) {
+        body = await (0, sharp_1.default)(body, { animated: false }).webp({ quality: 82 }).toBuffer();
+        contentType = 'image/webp';
+        await cachedFrame.save(body, { contentType, metadata: { cacheControl: 'public,max-age=31536000,immutable' } });
     }
     response.set('Content-Type', contentType);
     response.set('Cache-Control', 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400');
