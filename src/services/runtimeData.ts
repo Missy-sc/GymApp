@@ -8,8 +8,10 @@ export interface RuntimeData { userId:string; repositories:AppRepositories; cata
 export async function initializeRuntime(user:User|null):Promise<RuntimeData>{
   if(!user)return{userId:'local-user',repositories:localRepositories,catalog:seed,remote:false};
   const cache=new FirestoreCatalogCache();
-  const catalog=await cache.list().catch(()=>[]);setExerciseCatalog(catalog.length?catalog:seed);
-  return{userId:user.uid,repositories:firestoreRepositories,catalog:catalog.length?catalog:seed,remote:true};
+  const catalog=await cache.list();
+  if(!catalog.length) throw new Error('The exercise catalog is empty.');
+  setExerciseCatalog(catalog);
+  return{userId:user.uid,repositories:firestoreRepositories,catalog,remote:true};
 }
 export async function hydrateRuntime(runtime:RuntimeData){const[routines,gymClasses,schedule,sessions,preferences]=await Promise.all([runtime.repositories.routines.list(runtime.userId),runtime.repositories.gymClasses.list(runtime.userId),runtime.repositories.schedule.get(runtime.userId),runtime.repositories.sessions.list(runtime.userId),runtime.repositories.preferences.get(runtime.userId)]);return{routines:routines.map(r=>({...r,userId:runtime.userId})),gymClasses,schedule,sessions,preferences};}
 export const persistRoutine=(runtime:RuntimeData,r:Routine)=>runtime.repositories.routines.save({...r,userId:runtime.userId});
