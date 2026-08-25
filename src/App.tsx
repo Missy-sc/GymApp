@@ -124,6 +124,7 @@ function Workout({value,setValue,close,prefs,onToggleSound}:{value:{routine:Rout
 }
 function HistoryPage({sessions}:{sessions:WorkoutSession[]}){return <main><Header eyebrow="YOUR PROGRESS" title="History"/><div className="summary"><div><Activity/><b>{sessions.length}</b><span>Workouts</span></div><div><Clock3/><b>{Math.round(sessions.reduce((n,s)=>n+s.duration,0)/60)}</b><span>Minutes</span></div></div><SectionTitle title="Recent workouts"/><div className="list">{sessions.map(s=><div className="history-row card" key={s.id}><span className="date"><b>{new Date(s.startedAt).getDate()}</b>{new Date(s.startedAt).toLocaleString('en',{month:'short'})}</span><div><b>{s.routineName}</b><p>{fmt(s.duration)}   {s.completedExercises} exercises</p></div><span className="pill lime">{s.status}</span></div>)}{!sessions.length&&<Empty text="Finish a workout to start your history."/>}</div></main>}
 const THEME_META:Record<Theme,{label:string;sub:string;primary:string;accent:string;background:string}>={
+ 'touchflow-blue':{label:'TouchFlow',sub:'Coral · gesture-native and clean',primary:'#2563EB',accent:'#F97171',background:'#FFFFFF'},
  'electric-navy':{label:'Electric blue',sub:'Navy · sporty and modern',primary:'#173B57',accent:'#4DA8FF',background:'#F6F8FA'},
  'petrol-coral':{label:'Petrol blue',sub:'Coral · premium personality',primary:'#183D46',accent:'#FF6B5E',background:'#F7F7F4'},
  'violet-lavender':{label:'Deep violet',sub:'Lavender · digital and premium',primary:'#342A56',accent:'#8B6CFF',background:'#F8F7FA'},
