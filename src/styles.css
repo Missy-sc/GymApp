@@ -483,3 +483,9 @@ button:disabled,input:disabled,select:disabled,textarea:disabled{cursor:not-allo
 .sign-out svg{width:20px;height:20px}
 .auth-screen .input input:focus{outline:none}
 .auth-screen button:focus-visible{outline:3px solid var(--color-focus-ring);outline-offset:3px}
+.auth-screen .input.has-reveal input{padding-right:48px}
+.auth-screen .input .reveal{position:absolute;top:6px;right:0;z-index:5;display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:50%;background:none;color:var(--color-text-muted);transition:300ms cubic-bezier(.4,0,.2,1)}
+.auth-screen .input .reveal:hover{color:var(--color-accent)}
+.auth-screen .input .reveal svg{width:20px;height:20px}
+.auth-screen .overbox .input .reveal{color:rgba(255,255,255,.7)}
+.auth-screen .overbox .input .reveal:hover{color:#fff}

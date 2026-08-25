@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react';
-import { Check, Loader2 } from 'lucide-react';
+import { Check, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { authErrorMessage, authService } from '../services/auth';
 
 type Mode = 'login' | 'register';
@@ -21,17 +21,32 @@ function Field({
   autoComplete: string;
   onChange: (value: string) => void;
 }) {
+  const [revealed, setRevealed] = useState(false);
+  const password = type === 'password';
+
   return (
-    <div className={`input${value ? ' filled' : ''}`}>
+    <div className={`input${value ? ' filled' : ''}${password ? ' has-reveal' : ''}`}>
       <input
         id={id}
         name={id}
-        type={type}
+        type={password && revealed ? 'text' : type}
         value={value}
         autoComplete={autoComplete}
         onChange={(event) => onChange(event.target.value)}
       />
       <label htmlFor={id}>{label}</label>
+      {password && (
+        <button
+          type="button"
+          className="reveal"
+          aria-controls={id}
+          aria-pressed={revealed}
+          aria-label={revealed ? `Hide ${label.toLowerCase()}` : `Show ${label.toLowerCase()}`}
+          onClick={() => setRevealed((current) => !current)}
+        >
+          {revealed ? <EyeOff /> : <Eye />}
+        </button>
+      )}
       <span className="spin" />
     </div>
   );
