@@ -1,7 +1,6 @@
 import { collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
-import { onAuthStateChanged, signInAnonymously, signOut, type User } from 'firebase/auth';
 import type { CalendarAssignment, GymClass, Preferences, Routine, WorkoutSession } from '../domain/types';
-import { auth, db } from './firebase';
+import { db } from './firebase';
 import { store } from './storage';
 
 export interface AppRepositories {
@@ -29,8 +28,3 @@ export const firestoreRepositories:AppRepositories=remoteDb?{
   preferences:{get:async userId=>{const rows=await getDocs(query(collection(remoteDb,'user_preferences'),where('userId','==',userId)));return(rows.docs[0]?.data() as Preferences)??store.preferences()},save:async(userId,value)=>void await setDoc(doc(remoteDb,'user_preferences',userId),{...value,userId})},
 }:localRepositories;
 
-export const authService={
-  subscribe(callback:(user:User|null)=>void){return auth?onAuthStateChanged(auth,callback):(callback(null),()=>{})},
-  async signInGuest(){return auth?(await signInAnonymously(auth)).user:null},
-  async signOut(){if(auth)await signOut(auth)},
-};
