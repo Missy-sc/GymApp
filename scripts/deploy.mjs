@@ -9,14 +9,18 @@ const commands = {
 }
 
 function run(command, args, options = {}) {
-  const result = spawnSync(command, args, { shell: isWindows, stdio: 'inherit', ...options })
+  const result = spawnSync(command, args, {
+    shell: isWindows && (command === commands.npm || command === commands.firebase),
+    stdio: 'inherit',
+    ...options,
+  })
   if (result.status !== 0) {
     throw result.error ?? new Error(`${command} ${args.join(' ')} failed with exit code ${result.status ?? 'unknown'}`)
   }
 }
 
 function output(command, args) {
-  const result = spawnSync(command, args, { encoding: 'utf8', shell: isWindows })
+  const result = spawnSync(command, args, { encoding: 'utf8' })
   if (result.status !== 0) {
     throw result.error ?? new Error(result.stderr.trim() || `${command} ${args.join(' ')} failed`)
   }
