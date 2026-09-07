@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Check, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { authErrorMessage, authService } from '../services/auth';
 
@@ -73,6 +73,20 @@ export function AuthScreen() {
   const [regEmail, setRegEmail] = useState('');
   const [regPassword, setRegPassword] = useState('');
   const [regRepeat, setRegRepeat] = useState('');
+  useEffect(() => {
+    let active = true;
+    setBusy('google');
+    authService.completeGoogleRedirect()
+      .catch((error) => {
+        if (active) setNotice({ kind: 'error', text: authErrorMessage(error) });
+      })
+      .finally(() => {
+        if (active) setBusy(null);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const run = async (task: Busy, action: () => Promise<void>) => {
     setBusy(task);

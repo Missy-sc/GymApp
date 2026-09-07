@@ -1,6 +1,7 @@
 import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
+  getRedirectResult,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -15,6 +16,7 @@ import { auth, db } from './firebase';
 
 const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
+let googleRedirectResult: Promise<User | null> | null = null;
 
 const NOT_CONFIGURED = 'Sign-in is unavailable because Firebase is not configured.';
 
@@ -101,6 +103,16 @@ export const authService = {
       await signInWithRedirect(instance, googleProvider);
       return null;
     }
+  },
+  completeGoogleRedirect(): Promise<User | null> {
+    if (!googleRedirectResult) {
+      googleRedirectResult = getRedirectResult(requireAuth()).then(async (credential) => {
+        if (!credential) return null;
+        await saveUserProfile(credential.user).catch(() => undefined);
+        return credential.user;
+      });
+    }
+    return googleRedirectResult;
   },
   async sendPasswordReset(email: string): Promise<void> {
     await sendPasswordResetEmail(requireAuth(), email.trim());
