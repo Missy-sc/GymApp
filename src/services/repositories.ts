@@ -25,6 +25,6 @@ export const firestoreRepositories:AppRepositories=remoteDb?{
   gymClasses:{list:async userId=>(await getDocs(query(collection(remoteDb,'gym_classes'),where('userId','==',userId)))).docs.map(row=>row.data() as GymClass),save:async value=>void await setDoc(doc(remoteDb,'gym_classes',value.id),value),remove:async id=>void await deleteDoc(doc(remoteDb,'gym_classes',id))},
   schedule:{get:async userId=>{const row=await getDoc(doc(remoteDb,'user_schedules',userId));return(row.data()?.assignments as Record<string,CalendarAssignment>)??{}},save:async(userId,value)=>void await setDoc(doc(remoteDb,'user_schedules',userId),{userId,assignments:value,updatedAt:new Date().toISOString()})},
   sessions:{list:async userId=>(await getDocs(query(collection(remoteDb,'workout_sessions'),where('userId','==',userId)))).docs.map(row=>row.data() as WorkoutSession),save:async(value,userId)=>void await setDoc(doc(remoteDb,'workout_sessions',value.id),{...value,userId})},
-  preferences:{get:async userId=>{const rows=await getDocs(query(collection(remoteDb,'user_preferences'),where('userId','==',userId)));return(rows.docs[0]?.data() as Preferences)??store.preferences()},save:async(userId,value)=>void await setDoc(doc(remoteDb,'user_preferences',userId),{...value,userId})},
+  preferences:{get:async userId=>{const row=await getDoc(doc(remoteDb,'user_preferences',userId));return(row.data() as Preferences)??store.preferences()},save:async(userId,value)=>void await setDoc(doc(remoteDb,'user_preferences',userId),{...value,userId})},
 }:localRepositories;
 
