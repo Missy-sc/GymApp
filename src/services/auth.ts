@@ -40,9 +40,13 @@ const MESSAGES: Record<string, string> = {
   'auth/operation-not-allowed': 'This sign-in method is disabled in Firebase Authentication.',
 };
 
+const databaseClosedWhileHidden = (error: unknown) =>
+  error instanceof Error && /database is closing\/hidden/i.test(error.message);
+
 export function authErrorMessage(error: unknown): string {
   const code = typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
   if (MESSAGES[code]) return MESSAGES[code];
+  if (databaseClosedWhileHidden(error)) return 'Sign-in was interrupted. Please try again.';
   if (error instanceof Error && error.message) return error.message;
   return 'Something went wrong. Please try again.';
 }
@@ -89,7 +93,11 @@ export const authService = {
       return credential.user;
     } catch (error) {
       const code = typeof error === 'object' && error !== null && 'code' in error ? String(error.code) : '';
-      if (code !== 'auth/popup-blocked' && code !== 'auth/operation-not-supported-in-this-environment') throw error;
+      if (
+        code !== 'auth/popup-blocked' &&
+        code !== 'auth/operation-not-supported-in-this-environment' &&
+        !databaseClosedWhileHidden(error)
+      ) throw error;
       await signInWithRedirect(instance, googleProvider);
       return null;
     }
