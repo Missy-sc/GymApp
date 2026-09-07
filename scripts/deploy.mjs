@@ -9,16 +9,16 @@ const commands = {
 }
 
 function run(command, args, options = {}) {
-  const result = spawnSync(command, args, { stdio: 'inherit', ...options })
+  const result = spawnSync(command, args, { shell: isWindows, stdio: 'inherit', ...options })
   if (result.status !== 0) {
-    throw new Error(`${command} ${args.join(' ')} failed with exit code ${result.status ?? 'unknown'}`)
+    throw result.error ?? new Error(`${command} ${args.join(' ')} failed with exit code ${result.status ?? 'unknown'}`)
   }
 }
 
 function output(command, args) {
-  const result = spawnSync(command, args, { encoding: 'utf8' })
+  const result = spawnSync(command, args, { encoding: 'utf8', shell: isWindows })
   if (result.status !== 0) {
-    throw new Error(result.stderr.trim() || `${command} ${args.join(' ')} failed`)
+    throw result.error ?? new Error(result.stderr.trim() || `${command} ${args.join(' ')} failed`)
   }
   return result.stdout.trim()
 }
