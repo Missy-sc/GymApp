@@ -4,3 +4,22 @@ dist/
 .env
 .env.*
 !.env.example
+
+# AI Agent & Assistant configuration files
+.atl/
+.gemini/
+.impeccable/
+.cursor/
+.grok/
+.gga
+.agents/
+.agent/
+.dsh/
+.claudeignore
+CLAUDE.md
+AGENTS.md
+
+# Screenshot captures, fixtures, and local test outputs
+/*.png
+/*.jpg
+/*.webp
